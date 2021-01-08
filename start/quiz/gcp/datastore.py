@@ -11,24 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# TODO: Import the os module
-
-
-
-# END TODO
-
-# TODO: Get the GCLOUD_PROJECT environment variable
-
-
-
-# END TODO
+import os
+project_id = os.getenv('GCLOUD_PROJECT')
 
 from flask import current_app
-
-# TODO: Import the datastore module from the google.cloud package
-
-
+from google.cloud import ndb
 
 # END TODO
 
@@ -63,29 +50,17 @@ def save_question(question):
     pass
     
 
-# END TODO
-
-# TODO: Create a Datastore entity object using the key
-
-    
-
-# END TODO
-
-# TODO: Iterate over the form values supplied to the function
-
-    
-
-# END TODO
-
-# TODO: Assign each key and value to the Datastore entity
-
-        
-
-# END TODO
+def list_users():
+    # with ndb.Client(project=project_id).context():
+    query_all = User.query()
+    results = query_all.fetch(limit=10)
+    print(len(results))
+    return results
 
 
-# TODO: Save the entity
+# https://stackoverflow.com/questions/54900142/datastore-query-without-model-class
+class CycleDay(ndb.Expando):
+    pass
 
-    
-
-# END TODO
+class User(ndb.Expando):
+    pass

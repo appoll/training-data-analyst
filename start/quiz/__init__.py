@@ -15,7 +15,23 @@
 Setup flask
 """
 from flask import Flask
+from google.cloud import ndb
+import os
+project_id = os.getenv('GCLOUD_PROJECT')
+
+client = ndb.Client(project=project_id)
+
+# https://cloud.google.com/appengine/docs/standard/python3/migrating-to-cloud-ndb#using_a_runtime_context_with_wsgi_frameworks
+def ndb_wsgi_middleware(wsgi_app):
+    def middleware(environ, start_response):
+        with client.context():
+            return wsgi_app(environ, start_response)
+
+    return middleware
+
+
 app = Flask(__name__, static_folder='static')
+app.wsgi_app = ndb_wsgi_middleware(app.wsgi_app)  # Wrap the app in middleware.
 
 """
 Register blueprints for api and quiz

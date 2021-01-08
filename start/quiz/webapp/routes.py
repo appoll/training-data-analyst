@@ -20,7 +20,7 @@ from flask import send_from_directory
 from flask import request, redirect
 
 from quiz.webapp import questions
-
+from quiz.api import api
 """
 configure blueprint
 """
@@ -29,6 +29,11 @@ webapp_blueprint = Blueprint(
     __name__,
     template_folder='templates',
 )
+
+
+@webapp_blueprint.route('/list-users')
+def list_users():
+    return api.get_users()
 
 
 """

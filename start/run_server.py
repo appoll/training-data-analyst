@@ -13,5 +13,4 @@
 # limitations under the License.
 
 from quiz import app
-
 app.run(debug=True, port=8080)
