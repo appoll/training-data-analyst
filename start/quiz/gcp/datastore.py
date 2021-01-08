@@ -58,17 +58,12 @@ def get_users():
 
 def get_user_by_id(id):
     user = User.load_by_id(id)
-    # key = ndb.Key("User", id)
-    # # key = ndb.Key(urlsafe=id)
-    # # print(key.kind())
-    # #     if key.kind() != cls._get_kind():
-    # #         raise KeyError(f"Invalid kind {key.kind()}")
-    # #     return key.get()
-    # print(key)
-    # user = key.get()
-    # print(str(user))
     return user
 
+def get_user_by_email(email):
+    query = User.query(User.email == email)
+    result = query.fetch()
+    return result
 
 class Model(ndb.Expando):
     @classmethod
@@ -87,4 +82,5 @@ class CycleDay(Model):
     pass
 
 class User(Model):
-    pass
+    email = ndb.StringProperty()
+

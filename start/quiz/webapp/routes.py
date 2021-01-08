@@ -40,6 +40,12 @@ def get_user(id):
     print(id)
     return api.get_user_by_id(id)
 
+@webapp_blueprint.route('/get-user-by-email/<email>')
+def get_user_by_email(email):
+    print(id)
+    return api.get_user_by_email(email)
+
+
 
 """
 Renders home page

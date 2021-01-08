@@ -49,3 +49,10 @@ def get_user_by_id(id):
     response = Response(payload)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+def get_user_by_email(id):
+    user = datastore.get_user_by_email(id)
+    payload = json.dumps(user, indent=2, sort_keys=True, default=str)
+    response = Response(payload)
+    response.headers['Content-Type'] = 'application/json'
+    return response
