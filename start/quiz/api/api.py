@@ -35,7 +35,7 @@ from quiz.gcp import datastore
 # - Set header and return the response
 # """
 def get_users():
-    users = datastore.list_users()
+    users = datastore.get_users()
     payload = {'users': list(users)}
     payload = json.dumps(payload, indent=2, sort_keys=True, default=str)
     response = Response(payload)
@@ -43,3 +43,9 @@ def get_users():
     return response
 
 
+def get_user_by_id(id):
+    user = datastore.get_user_by_id(id)
+    payload = json.dumps(user, indent=2, sort_keys=True, default=str)
+    response = Response(payload)
+    response.headers['Content-Type'] = 'application/json'
+    return response

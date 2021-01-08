@@ -50,17 +50,41 @@ def save_question(question):
     pass
     
 
-def list_users():
-    # with ndb.Client(project=project_id).context():
+def get_users():
     query_all = User.query()
     results = query_all.fetch(limit=10)
     print(len(results))
     return results
 
+def get_user_by_id(id):
+    user = User.load_by_id(id)
+    # key = ndb.Key("User", id)
+    # # key = ndb.Key(urlsafe=id)
+    # # print(key.kind())
+    # #     if key.kind() != cls._get_kind():
+    # #         raise KeyError(f"Invalid kind {key.kind()}")
+    # #     return key.get()
+    # print(key)
+    # user = key.get()
+    # print(str(user))
+    return user
+
+
+class Model(ndb.Expando):
+    @classmethod
+    def load_by_id(cls, id_):
+        """Loads a model by it's url safe ID from the database.
+
+        :return: Returns the model with the given id (urlsafe) or None.
+        """
+        key = ndb.Key(urlsafe=id_)
+        if key.kind() != cls._get_kind():
+            raise KeyError(f"Invalid kind {key.kind()}")
+        return key.get()
 
 # https://stackoverflow.com/questions/54900142/datastore-query-without-model-class
-class CycleDay(ndb.Expando):
+class CycleDay(Model):
     pass
 
-class User(ndb.Expando):
+class User(Model):
     pass

@@ -31,9 +31,14 @@ webapp_blueprint = Blueprint(
 )
 
 
-@webapp_blueprint.route('/list-users')
-def list_users():
+@webapp_blueprint.route('/get-users')
+def get_users():
     return api.get_users()
+
+@webapp_blueprint.route('/get-user/<id>')
+def get_user(id):
+    print(id)
+    return api.get_user_by_id(id)
 
 
 """
