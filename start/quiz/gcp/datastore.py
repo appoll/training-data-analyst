@@ -17,6 +17,7 @@ project_id = os.getenv('GCLOUD_PROJECT')
 from flask import current_app
 from google.cloud import ndb
 
+
 # END TODO
 
 # TODO: Create a Cloud Datastore client object
@@ -65,6 +66,13 @@ def get_user_by_email(email):
     result = query.fetch()
     return result
 
+def get_cycle_days_by_user_email(email):
+    query = User.query(User.email == email)
+    user = query.fetch()[0]
+    query = CycleDay.query(ancestor=user.key)
+    result = query.fetch(limit=10)
+    return result
+
 class Model(ndb.Expando):
     @classmethod
     def load_by_id(cls, id_):
@@ -79,8 +87,9 @@ class Model(ndb.Expando):
 
 # https://stackoverflow.com/questions/54900142/datastore-query-without-model-class
 class CycleDay(Model):
-    pass
+    CERVICAL_MUCUS_ORDERING = ["t", "0", "f", "(S)", "S", "(S+)", "S+"]
+    cervical_mucus = ndb.TextProperty("cxmucus", choices=CERVICAL_MUCUS_ORDERING)
+    date = ndb.DateProperty()
 
 class User(Model):
     email = ndb.StringProperty()
-

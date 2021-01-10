@@ -16,6 +16,8 @@ Setup flask
 """
 from flask import Flask
 from google.cloud import ndb
+from swagger import Swagger
+from responses import ModelResponses, ResponseApp
 import os
 project_id = os.getenv('GCLOUD_PROJECT')
 
@@ -29,9 +31,17 @@ def ndb_wsgi_middleware(wsgi_app):
 
     return middleware
 
+URL_PREFIX = f'/api/v{1}'
 
-app = Flask(__name__, static_folder='static')
+
+class OvyFlask(ResponseApp):
+    pass
+
+
+app = OvyFlask(__name__, static_folder='static')
 app.wsgi_app = ndb_wsgi_middleware(app.wsgi_app)  # Wrap the app in middleware.
+Swagger(app, '{}/swagger.json'.format(URL_PREFIX))
+ModelResponses(app)
 
 """
 Register blueprints for api and quiz

@@ -56,3 +56,30 @@ def get_user_by_email(id):
     response = Response(payload)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+def get_cycle_days_by_user_id(id):
+    cycle_days = datastore.get_cycle_days_by_user_email(id)
+
+    dict_days = [day.to_dict() for day in cycle_days]
+    dict_days = [remove_empty_properties(day) for day in dict_days]
+
+    # dict_days = [convert_date_to_str(day) for day in dict_days]
+
+    response = {
+        'count': len(cycle_days),
+        'days': dict_days,
+    }
+    # payload = {'cycle_days': list(cycle_days)}
+    # payload = json.dumps(payload, indent=2, sort_keys=True, default=str)
+    # response = Response(payload)
+    # response.headers['Content-Type'] = 'application/json'
+    return response
+
+def remove_empty_properties(day):
+    return {
+        k: val for k, val in day.items() if val is not None and val != [] and val != {}
+    }
+
+def convert_date_to_str(day):
+    day["date"] = day["date"].strftime('%Y-%m-%d')
+    return day
